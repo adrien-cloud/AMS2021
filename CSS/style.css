@@ -1,0 +1,132 @@
+ body{
+    width: 90%;
+    margin: auto; 
+    background-color: gainsboro;
+}
+header{
+    text-align: center;
+}
+#main-content{
+    width: 100%;
+    min-height: 600px;
+    text-align: center;
+    background-color: #FEFFFF;
+}
+a{ 
+    padding: 10px;
+    margin: 20px;
+}
+div .left .right{
+    width: 45%;
+}
+div a{
+
+    display: block;
+}
+ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+nav
+    li
+        a{
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 3px;
+            margin: 10px;
+            font-size: 150%;
+}
+li{
+    float: left;
+}
+li a:hover{
+    background-color: pink;
+}
+h1{
+    color: #5597BB;
+    padding: 20px;
+    
+}
+p{
+ text-align: justify;
+ padding: 20px;
+ font-size: 20px;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+.height{
+    height: 400px;
+}
+img {
+    width: 300px;
+}
+#customPopup 
+{
+     background-color: pink;
+}
+#intro{
+    font-size: 25px;
+    text-align: center;
+    margin-right: 150px;
+    margin-left: 150px;
+}
+.clear{
+    clear: both;
+}
+input{
+    font-size:2em;
+    animation-name: carrousel;
+    animation-duration: 5s;
+    animation-iteration-count: infinite;
+    margin-top: 30px;
+}
+table{
+    text-align: justify;
+    border: 1px solid black;
+    margin: 50px;
+    padding: 50px;
+}
+td{
+    border: 1px solid black;
+    font-size: 30px;
+}
+@keyframes carrousel {
+            0%   {
+                color: red;
+                transform: rotate(0deg);
+
+            }
+            25%  {
+                color: yellow;
+                transform: rotate(120deg);
+
+
+            }
+            50%  {
+
+               color: blue;
+               transform: rotate(240deg);
+
+
+            }
+            100% {
+               
+                color: red;
+                transform: rotate(359deg);
+
+                
+            }}
+.lien {
+    text-align: left;
+    font-size: 30px;
+}
