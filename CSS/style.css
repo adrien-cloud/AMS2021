@@ -6,6 +6,9 @@
 header{
     text-align: center;
 }
+object{
+    width: 100%;
+}
 #main-content{
     width: 100%;
     min-height: 600px;
