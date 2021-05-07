@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/home/user/workspace/ampache/util.php</file>
+            <file>file:/home/user/workspace/ampache/lib/login.php</file>
+            <file>file:/home/user/workspace/ampache/templates/show_get_art.inc.php</file>
+            <file>file:/home/user/workspace/ampache/bin/catalog_update.inc</file>
+            <file>file:/home/user/workspace/ampache/lib/class/vainfo.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/xml_data.class.php</file>
+            <file>file:/home/user/workspace/ampache/admin/system.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/stats.class.php</file>
+            <file>file:/home/user/workspace/ampache/templates/show_arts.inc.php</file>
+            <file>file:/home/user/workspace/ampache/.gitattributes</file>
+            <file>file:/home/user/workspace/ampache/lib/class/json_data.class.php</file>
+            <file>file:/home/user/workspace/ampache/rss.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/user.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/subsonic_xml_data.class.php</file>
+            <file>file:/home/user/workspace/ampache/admin/access.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/ampache_rss.class.php</file>
+            <file>file:/home/user/workspace/ampache/bin/dump_album_art.inc</file>
+            <file>file:/home/user/workspace/ampache/lib/class/stream.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/vendor/Afterster/php-echonest-api/lib/EchoNest/Api/Playlist.php</file>
+            <file>file:/home/user/workspace/ampache/bin/calculate_art_size.inc</file>
+            <file>file:/home/user/workspace/ampache/playlist.php</file>
+            <file>file:/home/user/workspace/ampache/modules/catalog/local/local.catalog.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/channel.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/subsonic_api.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/album.class.php</file>
+            <file>file:/home/user/workspace/ampache/admin/users.php</file>
+            <file>file:/home/user/workspace/ampache/arts.php</file>
+            <file>file:/home/user/workspace/ampache/bin/websocket_run.inc</file>
+            <file>file:/home/user/workspace/ampache/lib/class/artist.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/stream_url.class.php</file>
+            <file>file:/home/user/workspace/ampache/register.php</file>
+            <file>file:/home/user/workspace/ampache/bin/clean_art_table.inc</file>
+            <file>file:/home/user/workspace/ampache/lib/class/upload.class.php</file>
+            <file>file:/home/user/workspace/ampache/albums.php</file>
+            <file>file:/home/user/workspace/ampache/lib/vendor/Afterster/php-echonest-api/lib/EchoNest/Api/Catalog.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/art.class.php</file>
+            <file>file:/home/user/workspace/ampache/server/fs.ajax.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/recommendation.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/api.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/catalog.class.php</file>
+            <file>file:/home/user/workspace/ampache/admin/modules.php</file>
+            <file>file:/home/user/workspace/ampache/lib/vendor/Afterster/php-echonest-api/lib/EchoNest/Api/Sandbox.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/search.class.php</file>
+            <file>file:/home/user/workspace/ampache/lib/install.lib.php</file>
+            <file>file:/home/user/workspace/ampache/lib/class/song.class.php</file>
+            <file>file:/home/user/workspace/ampache/server/index.ajax.php</file>
+        </group>
+    </open-files>
+</project-private>
