@@ -1,0 +1,39 @@
+body {
+            background-color: green;
+            font-size: 2em;
+            color: rgb(20, 200, 0);
+            text-shadow: 5px 5px 10px red;
+            font-family: "Hack";
+          }
+h1, h2, h3 {
+    	text-align: center;
+    }
+a {
+	color: rgb(49, 17, 228);
+}
+h1 {
+	animation-name: titre;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+
+}
+@keyframes titre {
+            0%   {
+                
+                transform: rotate(10deg);
+
+            }
+            50%  {
+                
+                transform: rotate(-10deg);
+
+
+            }
+            100%  {
+
+               
+               transform: rotate(10deg);
+
+
+                
+            }}
