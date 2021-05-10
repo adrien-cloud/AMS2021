@@ -17,7 +17,7 @@ play_me=$(cat $path_to_root/points/play_me)
 while true; do
    echo "$play_me" > $path_to_root/points/current
 
-   sudo sox -t mp3 "$path_to_root/playlist/$play_me" -t wav - | sudo $path_to_root/bin/pi_fm_rds -freq $frequency -audio - &
+   sudo sox -t mp3 "$path_to_root/playlist/$play_me" -t wav - | sudo $path_to_root/bin/pi_fm_rds -ps AMS -rt 'LA radio' -freq $frequency -audio - &
    pid=$!
 
 	
@@ -58,7 +58,7 @@ while true; do
    for song in  $path_to_root/playlist/*.mp3; do
       echo "$frequency"
       echo "$song" > $path_to_root/points/current
-      sudo sox -t mp3 $song -t wav - | sudo $path_to_root/bin/pi_fm_rds -freq $frequency -audio - &
+      sudo sox -t mp3 $song -t wav - | sudo $path_to_root/bin/pi_fm_rds -ps AMS -rt 'LA radio' -freq $frequency -audio - &
       pid=$!
 
       trap "kill $pid 2> /dev/null" EXIT
