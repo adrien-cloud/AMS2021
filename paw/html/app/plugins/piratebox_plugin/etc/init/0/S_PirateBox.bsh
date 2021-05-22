@@ -1,0 +1,34 @@
+//---- PirateBox startup Script runlevel 0
+source("/sdcard/paw/html/app/plugins/piratebox_plugin/bsh/functions.bsh");
+
+try {
+	// Check if tethering is active
+	if(getProcessPid(DNSMASQ_BIN) != -1) {
+	  ip = getWlanIp();
+	  // Kill dnsmasqd
+	  killProcessByName(DNSMASQ_BIN);
+	  
+	  // Start new dnsmasqd
+	  String[] dnsmasqCmd = new String[] {
+	    DNSMASQ_BIN + " --no-resolv --no-poll --dhcp-range=192.168.42.2,192.168.42.254,1h --dhcp-range=192.168.43.2,192.168.43.254,1h --dhcp-range=192.168.44.2,192.168.44.254,1h --dhcp-range=192.168.45.2,192.168.45.254,1h --dhcp-range=192.168.46.2,192.168.46.254,1h --dhcp-range=192.168.47.2,192.168.47.254,1h --dhcp-range=192.168.48.2,192.168.48.254,1h --address=/#/" + ip + " --pid-file=" + PIRATEBOX_PLUGIN_DIR + "/var/dnsmasq.pid"
+	 
+	    };
+
+	    execRootShell(dnsmasqCmd);
+	   
+	   // Port redirect
+	   portRedirect("ADD");
+
+	   // Backup original config file and copy piratebox config to PAW conf directory
+	   String[] copyCommand = new String[] {
+	     "cat " + SERVER_CONFIG_DIR + "/handler.xml > " + PIRATEBOX_PLUGIN_DIR + "/conf/backup/handler.xml",
+	     "cat " + PIRATEBOX_PLUGIN_DIR + "/conf/handler.xml > " + SERVER_CONFIG_DIR + "/handler.xml"
+	   };
+
+	   execShell(copyCommand);
+	   
+	}
+
+}
+catch(e) {
+}

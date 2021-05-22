@@ -1,0 +1,150 @@
+<bsh>
+service = server.props.get("serviceContext");
+pluginVersion = "0.4";
+plugin_name="piratebox_plugin";
+
+pawHome = service.pawHome;
+</bsh>
+
+<html>
+<head>
+<title>PirateBox Setup for PAW</title>
+ <link rel="stylesheet" href="../../css/default.css" />
+<script type="text/javascript" src="../../js/jquery.js"></script>
+</head>
+<bsh>source(pawHome + "/html/app/auth.bsh");</bsh>
+<bsh>source(pawHome + "/html/app/plugins/" + plugin_name + "/bsh/functions.bsh");</bsh>
+<bsh>source(pawHome + "/html/app/plugins/" + plugin_name + "/bsh/wifi.bsh");</bsh>
+<body>
+
+<bsh>
+  suCmd = isCommandAvailable("su");
+  iptablesCmd = isCommandAvailable("iptables");
+  dnsmasqCmd = isCommandAvailable(DNSMASQ_BIN);
+
+  systemCheckOk = suCmd && iptablesCmd && dnsmasqCmd;
+</bsh>
+
+<img src="icon.png" /> <br />
+<h3>PirateBox Setup for PAW</h3>
+<p style="color: gray;">
+Plugin Version: <bsh>$$.print(pluginVersion);</bsh><br />
+Plugin installed: <span id="install_status"></span>
+</p>
+<p>
+This plugin installs a PiratBox on the Android device.<br/>
+Root is required for this to work. If this screen shows a warning message the plugin will most likely not work.<br/>
+On installation an WiFi Access Point (AP) can be created. A previous defined AP will be deleted.<br/>
+If AP creation does not work, please create one manually.<br/>
+</p>
+<p>
+<b><i>
+The PirateBox configuration will only be used if tethering is active when PAW is started.<br/>
+If tethering is not active, PAW will start normally without the PirateBox setup.
+</i></b>
+</p>
+<p>
+Detailed information about PirateBox can be found at the <a href="http://wiki.daviddarts.com/PirateBox" target="_blank" class="link">PirateBox Wiki</a>.<br/>
+More information about the plugin can be found at the <a href="http://fun2code-blog.blogspot.com" target="_blank" class="link">Fun2Code Blog</a>. 
+</p>
+<p>
+<b>Note:</b><br/>
+This plugin was tested with the following configuration:
+<i>Notion Ink Adam running AdamComb v0.3</i>.<br/>
+Other configurations were not tested and might not work.<br/>
+As usual: <b>Use at your own risk!</b>
+</p>
+</p>
+<div style="display:<bsh>$$.print(systemCheckOk ? "none" : "block")</bsh>">
+<fieldset style="width: 40%; background: rgb(211, 050, 050); color: white;">
+<legend><b>Warning</b></legend>
+<b>The following problems were found:</b>
+<ul>
+<bsh>
+if(!suCmd) { print("<li>Root not found</li>"); }
+if(!iptablesCmd) { print("<li>Tethering not found</li>"); }
+if(!dnsmasqCmd) { print("<li>Portforwarding not possible</li>"); }
+</bsh>
+</ul>
+<br/>
+PirateBox willmost likely not work on this device!
+</fieldset>
+</div>
+
+<bsh>
+install = parameters.get("install");
+if(install != null && install.equals("true")) {
+   createAp = parameters.get("create_ap");
+  // INSTALL (use cat, cp might not be available!)
+  String[] copyCmd = new String[] {
+	"cat " + pawHome + "/html/app/plugins/" + plugin_name + "/etc/init/0/S_PirateBox.bsh > " + pawHome + "/etc/init/0/S_PirateBox.bsh",
+	"cat " + pawHome + "/html/app/plugins/" + plugin_name + "/etc/init/0/K_PirateBox.bsh > " + pawHome + "/etc/init/0/K_PirateBox.bsh",
+  	"cat " + pawHome + "/html/app/plugins/" + plugin_name + "/etc/init/1/S_PirateBox.bsh > " + pawHome + "/etc/init/1/S_PirateBox.bsh",
+	"cat " + pawHome + "/html/app/plugins/" + plugin_name + "/etc/init/1/K_PirateBox.bsh > " + pawHome + "/etc/init/1/K_PirateBox.bsh"
+  };
+
+  execShell(copyCmd);
+
+  if(createAp != null) {
+    createOpenAp("PirateBox - Share Freely");
+    // Enble WiFi
+    enableWifi(true);
+  }
+
+  print("<p><div style='width: 40%; background: rgb(150, 193, 77); border: 1px solid black;padding: 10px;'><h3><img src='icon.png' style='width: 48px;'/><i>PirateBox has been installed!</i></h3>");
+  if(createAp != null) {
+      print("<b>Access Point has been created!</b><br/>");
+  }
+  print("The server has to be restarted for the changes to take effect!</div></p>");
+
+}
+
+uninstall = parameters.get("uninstall");
+if(uninstall != null && uninstall.equals("true")) {
+   // UNINSTALL
+   String[] rmCmd = new String[] {
+	"rm " + pawHome + "/etc/init/0/S_PirateBox.bsh",
+	"rm " + pawHome + "/etc/init/0/K_PirateBox.bsh",
+  	"rm " + pawHome + "/etc/init/1/S_PirateBox.bsh",
+	"rm " + pawHome + "/etc/init/1/K_PirateBox.bsh"
+  };
+
+  execShell(rmCmd);
+
+   print("<p><div style='width: 40%; background: rgb(150, 193, 77); border: 1px solid black;padding: 10px;'><h3><img src='icon.png' style='width: 48px;'/><i>PirateBox has been uninstalled!</i></h3>");
+   print("The server has to be restarted for the changes to take effect!</div></p>");
+}
+
+</bsh>
+<p />
+<fieldset style="width: 40%;">
+<legend>Install PirateBox</legend>
+<p style="color: gray;">
+Press the button to install PirateBox on your device.
+</p>
+<form method="post">
+<table>
+<tr><td>Create Access Point named <b><i>PirateBox - Share Freely</i></b></td><td><input type="checkbox" name="create_ap"></td></tr>
+</table>
+<p />
+<input type="hidden" name="install" value="true" />
+<input type="submit" value="Install" />
+</form>
+</fieldset>
+<p />
+<fieldset style="width: 40%;">
+<legend>Uninstall PirateBox</legend>
+<p style="color: gray;">
+Press the button to uninstall PirateBox from your device.
+</p>
+<form method="post">
+<p />
+<input type="hidden" name="uninstall" value="true" />
+<input type="submit" value="Uninstall" />
+</form>
+</fieldset>
+<script type="text/javascript">
+$("#install_status").html("<bsh>$$.print(new File(pawHome + "/etc/init/0/S_PirateBox.bsh").exists() ? "yes" : "no");</bsh><br/>");
+</script>
+</body>
+</html>

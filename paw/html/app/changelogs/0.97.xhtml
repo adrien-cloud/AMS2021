@@ -1,0 +1,53 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Changelog 0.97</title>
+<link rel="stylesheet" href="../css/default.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/executeScript.js"></script>
+</head>
+<body>
+<bsh>source(server.props.get("serviceContext").pawHome + "/html/app/auth.bsh");</bsh>
+<h1>Changelog - Version 0.97</h1>
+<p>This release contains:
+<ul>
+    <li>WebSocket: Binary Message Support</li>
+    <li>CAS Handler</li>
+	<li>Bugfixes</li>
+</ul>
+</p>
+
+<h2>Server</h2>
+<h3>WebSocket: Binary Message Support</h3>
+WebSockets now support binary messages.
+For more information about changes, please consult the <a href="../dev/paw_functions.xhtml#websocket" class="link"><i>WebSocket</i></a> section inside the <a href="../dev/paw_functions.xhtml" class="link"><i>PAW Functions</i></a> documentation.
+<p></p>
+<h3>CAS Handler</h3>
+Handler class name: <tt>org.paw.handler.CasHandler</tt>
+<p>
+Implements the CAS protocol: <a href="http://jasig.github.io/cas/4.0.x/protocol/CAS-Protocol.html" class="link" target="_blank">CAS Protocol</a>
+<p>
+<b>Parameters</b>
+<dl>
+    <dt><tt>prefix</tt></dt>
+    <dd>URL protection prefix. Defaults to "<tt>/</tt>".</dd>
+    <br>
+    <dt><tt>casServerUrl</tt></dt>
+    <dd>Base CAS server URL.</dd>
+    <br>
+    <dt><tt>cookieName</tt></dt>
+    <dd>
+    Name of the session cookie.<br>
+    The default cookie name is "<tt>cookie</tt>".
+    <p>
+    A cookie must be available, it is not
+    created by this handler.<br>
+    To generate a session cookie a <tt>sunlabs.brazil.handler.CookieSessionHandler</tt> handler should be used prior to this handler
+    inside the handler chain.
+    </dd>
+ </dl>
+
+
+<p>
+</body>
+</html>

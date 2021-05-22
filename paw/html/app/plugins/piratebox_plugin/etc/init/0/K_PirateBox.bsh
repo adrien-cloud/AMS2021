@@ -1,0 +1,12 @@
+//---- PirateBox shutdown script runlevel 0
+source("/sdcard/paw/html/app/plugins/piratebox_plugin/bsh/functions.bsh");
+
+try {
+  // Kill dnsmasq
+  killProcessByName(DNSMASQ_BIN);
+
+  // Remove redirect
+  portRedirect("DELETE");
+}
+catch(e) {
+}

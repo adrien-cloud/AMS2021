@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>PirateBox</title>
+<link rel="stylesheet" href="css/default.css">
+
+<script type="text/javascript">
+function submitForm() {
+	document.getElementById("upload_form").style.display = 'none';
+	document.getElementById("upload_anim").style.display = 'block';
+	return true;
+}
+
+</script>
+</head>
+<body background="#fafafa">
+
+<center>
+<img src="images/piratebox-logo.png"  alt="PirateBox Logo" style="width: 150px;"/>
+</center>
+
+<center>
+<table>
+<tr><td>
+<b>1.</b> Learn more about the project <a href="about.html">here</a>.<br/> 
+<b>2.</b> Click above to begin sharing.<br> 
+<b>3.</b> Browse and download files <a href="list.xhtml">here</a>.<br/>
+</td></tr>
+</table>
+</center>
+<br/>
+<center>
+<form id="upload_form" action="pb.xhtml" onSubmit="submitForm();"; method="post" enctype="multipart/form-data" >
+<input name="upfile1" type="file">&nbsp;<input value="Send" type="submit"></center>
+</form>
+<div id="upload_anim" style="display: none;">
+<center>Sending&nbsp;&nbsp;&nbsp;<img src="images/ajax-loader.gif"  alt="Loader" /></center> 
+</div>
+</center>
+<br/>
+<center>
+<iframe name="bsoread" src="chat/bsoread.xhtml" width="50%" height="370">
+Your browser does not support inline frames or is currently configured not to display inline frames.</iframe></p>
+<script language="javascript">
+<!--
+function reset() {
+self.document.bsowrte.data.value="";
+self.document.bsowrte.data.focus();
+}
+-->
+</script>
+<form method="POST" action="chat/bsowrte.xhtml" target="bsoread" name="bsowrte" onsubmit="setTimeout('reset()',10)">
+<p align="center">
+<b>Name:</b><input type="text" name="name" size="10" value="anonymous">&nbsp;&nbsp; <b>Message:</b><input type="text" name="data" size="20">&nbsp;&nbsp;
+<input type="submit" value="PirateBox Chat" name="submit"><br>
+<b>Color:</b> Default<input type="radio" value="def" name="color" checked> |
+<font color="#0000FF">Blue</font><input type="radio" value="blue" name="color"> 
+| <font color="#008000">Green</font><input type="radio" value="green" name="color"> 
+| <font color="#FF8040">Orange</font><input type="radio" value="orange" name="color"> 
+| <font color="#FF0000">Red</font><input type="radio" value="red" name="color"></p>
+</form>
+</center>
+
+</body>
+</html>

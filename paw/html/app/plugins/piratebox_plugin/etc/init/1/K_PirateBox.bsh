@@ -1,0 +1,14 @@
+source("/sdcard/paw/html/app/plugins/piratebox_plugin/bsh/wifi.bsh");
+
+try {
+  // Cancel notification
+  cancelNotification(4321);
+
+  // Stop AP
+  disableAp();
+  
+  // Enble WiFi
+  enableWifi(true);
+}
+catch(e) {
+}

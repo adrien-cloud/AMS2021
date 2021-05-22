@@ -1,0 +1,144 @@
+import org.jdom.input.SAXBuilder;
+
+SERVER_CONFIG_DIR = "/sdcard/paw/conf";
+PIRATEBOX_PLUGIN_DIR = "/sdcard/paw/html/app/plugins/piratebox_plugin";
+DNSMASQ_BIN = "/system/bin/dnsmasq";
+
+execShell(String[] commands) {
+	execShell(commands , false);
+}
+
+execRootShell(String[] commands) {
+	execShell(commands , true);
+}
+
+execShell(String[] commands , boolean root) {
+	shellCmd = root ? "su -c sh" : "sh";
+
+	sh = Runtime.getRuntime().exec(shellCmd);
+	os = sh.getOutputStream();
+
+	for(cmd : commands) {
+		os.write((cmd + "\n").getBytes());
+	}
+
+	os.write(("exit\n").getBytes());
+	os.flush();
+	sh.waitFor();	
+}
+
+String getServerPort() {
+    try {
+      builder = new SAXBuilder(false);
+      doc = builder.build(new File(SERVER_CONFIG_DIR + "/server.xml"));
+
+      // Get root element
+      root = doc.getRootElement();
+
+      return root.getChild("port").getText();
+    } catch (e) {
+      return null;
+    }
+  }
+
+boolean isCommandAvailable(String command) {
+  try {
+     proc = Runtime.getRuntime().exec(command);
+     proc.destroy();
+     return true;
+  }
+  catch(e) {
+    return false;
+  }
+}
+
+String getWlanIp() {
+    ip = null;
+
+    for (en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+      intf = en.nextElement();
+
+      if(!intf.getName().toLowerCase().startsWith("wl")) {
+        continue;
+      }
+
+      for ( enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+              inetAddress = enumIpAddr.nextElement();
+              if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address && inetAddress.getHostAddress().matches("(^10|192|172).*")) {
+                ip = inetAddress.getHostAddress();
+                break;
+              }
+            }
+    }
+              
+    return ip;
+}
+
+int getProcessPid(String processName) {
+  pid = -1;
+  ps = Runtime.getRuntime().exec("ps");
+  is = ps.getInputStream();
+  stdout = new BufferedReader(new InputStreamReader(is));
+
+  lines = 0;
+  pidCol = 0;
+  procCol = 4;
+
+  while((line = stdout.readLine()) != null) {
+    
+    lines++;
+    
+    /* There seem to be two versions of ps commands */
+    if(lines == 1) {
+      if(line.startsWith("USER")) {
+        pidCol = 1;
+        procCol = 8;
+      }
+     
+      continue;
+    }
+    
+    line = line.replaceAll("^\\s+", "");
+    processInfo = line.split("\\s+");
+
+    if(processInfo[procCol].equals(processName)) {
+      pid = Integer.parseInt(processInfo[pidCol]);
+       break;
+    }  
+  }
+  is.close();
+  return pid;
+}
+
+int killProcessByName(String processName) {
+  pid = getProcessPid(processName);
+  if(pid != -1) {
+    String[] killCmd = new String[] {
+  	"kill " + pid,
+ 
+    };
+
+    execRootShell(killCmd);
+    return pid;
+  }
+  else {
+    return -1;
+  }
+  
+}
+
+portRedirect(String action) { // Action can be ADD or DELETE
+  redirectFrom = 80;
+  redirectTo = getServerPort();
+  action = "-" + action.substring(0, 1);
+
+  String[] iptablesCmds = new String[] {
+     "iptables -t nat " + action + " OUTPUT -d 127.0.0.1 -p tcp --dport " + redirectFrom + " -j REDIRECT --to-ports " + redirectTo,
+     "iptables -t nat " + action + " OUTPUT -d " + ip + " -p tcp --dport " + redirectFrom + " -j REDIRECT --to-ports " + redirectTo,
+     "iptables -t nat " + action + " PREROUTING -d " + ip + " -p tcp --dport " + redirectFrom + " -j REDIRECT --to-ports " + redirectTo
+  };
+
+  execRootShell(iptablesCmds);
+}
+
+

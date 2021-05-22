@@ -1,0 +1,26 @@
+<bsh>
+import java.text.SimpleDateFormat;
+
+dir = "/sdcard/paw/html/app/plugins/piratebox_plugin/html/chat";
+datafile = new File(dir + "/data.bso");
+
+name = parameters.get("name") != null ? parameters.get("name") : "&nbsp;";
+rawdata = parameters.get("data") != null ? parameters.get("data") : "&nbsp;";
+data = rawdata.replaceAll(">", "&gt;").replaceAll("<", "$lt;");
+color = parameters.get("color");
+
+date = new Date();
+
+old = new byte[(int) datafile.length()];
+fis = new FileInputStream(datafile);
+fis.read(old);
+fis.close();
+
+fos = new FileOutputStream(datafile);
+fos.write(("<date>" + new SimpleDateFormat("HH:mm:ss").format(date) + "</date>&nbsp;&nbsp;<name>" + name + ":</name>&nbsp;&nbsp;&nbsp;<data class='" + color + "'>" + data + "</data><br>\n").getBytes());
+
+fos.write(old);
+fos.close();
+
+print("<html><head><meta http-equiv=\"refresh\" content=\"0;url=bsoread.xhtml\"></head><body>Reading...</body></html>");
+</bsh>

@@ -1,0 +1,28 @@
+import android.content.Context;
+import android.net.wifi.WifiConfiguration;
+
+service = server.props.get("serviceContext");
+wifiMgr = service.getSystemService(Context.WIFI_SERVICE);
+
+boolean isApRunning() {
+  return wifiMgr.getWifiApState() == wifiMgr.WIFI_STATE_ENABLED ? true : false; 
+}
+
+createOpenAp(String ssid) {
+  apConfig = new WifiConfiguration();
+  apConfig.SSID = ssid;
+  apConfig.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+  
+  wifiMgr.setWifiApEnabled(apConfig, true);
+  disableAp();
+}
+  
+enableAp() {
+  wifiMgr.setWifiApEnabled(null, true);
+}
+
+disableAp() {
+  wifiMgr.setWifiApEnabled(null, false);
+}
+
+

@@ -1,0 +1,18 @@
+<bsh>
+print("<html><head><meta name='GENERATOR' content='BshShoutOut'><title>Shout-Out Data</title>");
+print("<link type='text/css' href='style.css' rel='Stylesheet' />");
+print("</style></head>");
+print("<body>");
+dir = "/sdcard/paw/html/app/plugins/piratebox_plugin/html/chat";
+datafile = new File(dir + "/data.bso");
+
+in = new DataInputStream(new FileInputStream(datafile));
+br = new BufferedReader(new InputStreamReader(in));
+while ((line = br.readLine()) != null)   {
+  print(line);
+}
+in.close();
+
+print("</body>");
+print("</html>");
+</bsh>

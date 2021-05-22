@@ -1,0 +1,228 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Changelog 0.96</title>
+<link rel="stylesheet" href="../css/default.css">
+<script type="text/javascript" src="../js/jquery.js"></script>
+<script type="text/javascript" src="../js/executeScript.js"></script>
+</head>
+<body>
+<bsh>source(server.props.get("serviceContext").pawHome + "/html/app/auth.bsh");</bsh>
+<h1>Changelog - Version 0.96</h1>
+<p>This release contains:
+<ul>
+    <li>Upload Size</li>
+	<li>Simplified BeanShell Tags</li>
+	<li>Enhanced BeanShell Debug Output</li>
+	<li>BeanShell Handlers</li>
+	<li>BeanShell Filters</li>
+	<li>File Not Found Handler</li>
+	<li>Web Sockets: Get all Sockets for Protocol</li>
+	<li>Web Sockets: Send Message to All Protocol Sockets</li>
+	<li>MD5 command</li>
+</ul>
+</p>
+
+<h2>Server</h2>
+<h3>Upload Size</h3>
+The server now supports upload sizes > 2GB.
+
+<h3>Simplified BeanShell Tags</h3>
+BeanShell pages can now include PHP like tags (&lt;?bsh ... ?&gt;).<br>
+A short print tag (&lt;?= ?&gt;) is also available.
+<p>Here is an example:</p>
+<pre>
+&lt;html&gt;
+&lt;body&gt;
+&lt;?bsh
+	import de.fun2code.android.pawserver.AndroidInterface;
+	import android.content.Context;
+	import android.hardware.Sensor;
+
+?&gt;
+&lt;?bsh
+	sensorListener = AndroidInterface.getSensorListener();
+	proximity = sensorListener.getProximity();
+
+	if(proximity &gt; 0) {
+?&gt;
+&lt;h3&gt; Hi ... :) &lt;/h3&gt;
+&lt;?bsh
+	}
+?&gt;
+&lt;pre&gt;Proximity: &lt;?=proximity ?&gt;&lt;/pre&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<p></p>
+<h3>Enhanced BeanShell Debug Output</h3>
+If the BeanShell handler in <tt>paw/conf/handler.xml</tt> conatains the property <tt>debug</tt> with the value <tt>true</tt> the error output that is included inside the page source is enhanced. This now includes the generated BeanShell source together with line numbers and the erroneous line market with an asterisk (*).
+<p>Here is an exmample:</p>
+<pre>
+&lt;!--
+Generated BeanShell Code:
+
+  1    $$.print(&quot;&lt;html&gt;\n&lt;body&gt;\n&quot;);
+  2    // Imports
+  3    import de.fun2code.android.pawserver.AndroidInterface;
+  4    import android.content.Context;
+  5    import android.hardware.Sensor;
+  6    sensorListener = AndroidInterface.getSensorListener();
+* 7    proximity = sensorListene.getProximity();
+
+--&gt;
+</pre>
+<p></p>
+<h3>BeanShell Handlers</h3>
+The <tt>org.paw.handler.CallBshHandler</tt> makes it possible to write handlers in BeanShell. This eliminates the need
+to comile code. It is recommended to use this only for testing purposes, because BeanShell code might have some performance
+issues.
+<br>
+The handler can be inserted into the <tt>paw/conf/handler.xml</tt> file.
+<p>
+    Here is an example:
+    <pre>
+  &lt;handler status=&quot;active&quot;&gt;
+    &lt;name&gt;Call BeanShell Handler Wrapper&lt;/name&gt;
+    &lt;description&gt;Call BeanShell Handler&lt;/description&gt;
+    &lt;removable&gt;true&lt;/removable&gt;
+    &lt;id&gt;callBshHandler&lt;/id&gt;
+    &lt;files/&gt;
+    &lt;params&gt;
+	  &lt;param name=&quot;callBshHandler.class&quot; value=&quot;org.paw.handler.CallBshHandler&quot; /&gt;
+      &lt;param name=&quot;callBshHandler.script&quot; value=&quot;[PAW_HOME]/bshHandlerFilter/testHandler.bsh&quot; /&gt;
+    &lt;/params&gt;
+  &lt;/handler&gt;
+    </pre>
+</p>
+The handler parameter <tt>script</tt> defines the BeanShell script to call.
+<br>
+The BeanShell script contains the same method definitions as defined by the Brazil <tt>Handler</tt> Interface.
+<p>
+    For more information, have a look at the <a href="https://goo.gl/HR3j4i" target="_blank" class="link">Brazil API</a>.
+</p>
+<p>
+    Below is an empty script which shows the methods and the variales available for each method.
+</p>
+<pre>
+    /*
+    	Variables: server, prefix, handler
+    */
+    init() {
+
+    }
+
+    /*
+    	Variables: server, prefix, handler, request
+    */
+    respond() {
+
+    }
+</pre>
+To all methods the variable <tt>handler</tt> is passed, which holds a reference to the calling <i>Handler</i>. To store objects inisde the handler you can use the method <tt>handler.save(String key, Object object)</tt>. To load an object form the <tt>Handler</tt> use <tt>handler.load(String key)</tt>.
+<p></p>
+
+<h3>BeanShell Filters</h3>
+Similar to the BeanShell Handler there is also the BeanShell Filter class <tt>org.paw.filter.CallBshFilter</tt>.
+<br>
+This filter works the same way as the above described BeanShell Handler and is defined inside the <tt>paw/conf/filter.xml</tt>
+file.
+<p>
+    Here is a sample <tt>filter.xml</tt> entry:
+    <pre>
+ &lt;filter status=&quot;active&quot;&gt;
+  &lt;name&gt;Call Bsh Filter&lt;/name&gt;
+  &lt;description&gt;Sample CallBshFilter&lt;/description&gt;
+  &lt;removable&gt;true&lt;/removable&gt;
+  &lt;id&gt;callbshFilter&lt;/id&gt;
+  &lt;files /&gt;
+  &lt;params&gt;
+    &lt;param name=&quot;callbshFilter.class&quot; value=&quot;org.paw.filter.CallBshFilter&quot; /&gt;
+    &lt;param name=&quot;callbshFilter.script&quot; value=&quot;[PAW_HOME]/bshHandlerFilter/statusPageFilter.bsh&quot; /&gt;
+  &lt;/params&gt;
+&lt;/filter&gt;
+    </pre>
+</p>
+	The parameter <tt>script</tt> defines the BeanShell script to call which includes methods implemented by the <tt>Filter</tt> interface provided by the <a href="https://goo.gl/HR3j4i" target="_blank" class="link">Brazil API</a>.
+	<p>
+		Here is an empty script containig the available methods and provided variables.
+		<pre>
+    /*
+        Variables: server, prefix, filter
+    */
+    init() {
+	
+    }
+
+    /*
+        Variables: server, prefix, request, filter
+    */
+    respond() {
+	
+    }
+
+    /*
+        Variables: server, prefix, headers, filter
+    */
+    shouldFilter() {
+	
+    }
+
+    /*
+        Variables: server, prefix, request, headers, content, filter
+    */
+    filter() {
+
+    }
+
+	</pre>
+</p>
+The variable <tt>filter</tt> is passed to all methods. To persist objects inside the filter, use the <tt>filter.save(String key, Object object)</tt> and <tt>filter.load(String key)</tt> methods.
+<p></p>
+<h3>File Not Found Handler</h3>
+The new <tt>FileNotFoundHandler</tt> is called if a document is not handled by any other handler and is located at the end of the handler chain.<br>
+The default configuration returns a default error message. To set a custom message the parameter <tt>message</tt> can be used.
+<p>
+Here is an exmaple:
+<pre>
+&lt;param name="notFound.message" value="Sorry, page not Found." /&gt;
+</pre>
+</p>
+To configure a custom web page the parameters <tt>file</tt> and <tt>mime</tt> can be defined.
+<p>
+Example:
+<pre>
+&lt;param name="notFound.file" value="[PAW_HOME]/html/pages_err/not_found.html" /&gt;
+&lt;param name="notFound.mime" value="text/html" /&gt;
+</pre>
+</p>
+The follwing placeholders can be put into a custom HTML page:
+<table cellspacing="20">
+<tr><td><tt>@status</tt></td><td>HTTP status code</td></tr>
+<tr><td><tt>@url</tt></td><td>Requested URL</td></tr>
+<tr><td><tt>@server</tt></td><td>Server name and version</td></tr>
+</table>
+
+<p></p>
+
+<h2>PAW Functions</h2>
+<h3>Web Sockets: Get all Sockets for Protocol</h3>
+The command <tt>wsSockets(protocol)</tt> return a list of all sockets belonging to the specified <tt>protol</tt> (e.g. "chat").
+<p></p>
+<h3>Web Sockets: Send Message to All Protocol Sockets</h3>
+The BeanShell command <tt>wsSendAll(message, protocol)</tt> sends a <tt>message</tt> to all sockets belonging to the specified <tt>protocol</tt>.
+<p></p>
+<h3>MD5 Command</h3>
+The command <tt>md5(string)</tt> accepts a <tt>string</tt> as argument and converts it into a MD5 hash.
+<br><br>
+<textarea cols="80" rows="2" id="md5Script">
+$$.print(md5("test string"));
+</textarea><br>
+<button onClick="executeScript('md5Script', 'md5ScriptLoader', 'md5ScriptResult');">Execute Script</button>&nbsp;<img id="md5ScriptLoader" src="../images/loader.gif" style="display: none;" width="16"><br>
+Result:<br><textarea type="text" id="md5ScriptResult" cols="40" rows="1"></textarea>
+
+<p></p>
+
+<p></p>
+</body>
+</html>

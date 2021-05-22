@@ -1,0 +1,22 @@
+//---- PirateBox startup script runlevel 1
+source("/sdcard/paw/html/app/plugins/piratebox_plugin/bsh/functions.bsh");
+
+try {
+  // Check if tethering is active
+  if(getProcessPid(DNSMASQ_BIN) != -1) {
+          // Restore original configuration
+	  String[] copyCommand = new String[] {
+	     "cat " + PIRATEBOX_PLUGIN_DIR + "/conf/backup/handler.xml > " + SERVER_CONFIG_DIR + "/handler.xml"
+	  };
+
+	  execShell(copyCommand);
+
+	  // Set maximum file upload size (to 200MB)
+	  server.maxPost = 200 * 1024 * 1024;
+
+	  // Show notification
+	  showNotification(com.android.internal.R.drawable.stat_sys_tether_general, "PirateBox started!", "PirateBox", "PirateBox has been started.", 4321, false, "#0000FF", false, false);
+  }
+}
+catch(e) {
+}
