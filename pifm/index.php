@@ -190,7 +190,7 @@
             </div>
          </div>
       </div>
-
+  
       <div style="background-color:#F2F2F2;">
          <div style="color:#585858; margin:20px; padding:20px;">
             <p class="ex2">Frequency:</p>
